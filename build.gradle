@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.rbinternational'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    maven { url 'https://artifacts.rbi.tech/artifactory/public' }
+}
+
+dependencies {
+    testImplementation 'org.testng:testng:7.8.0'
+    //compile group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '3.141.59'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.10.0'
+    testImplementation 'org.testng:testng:7.1.0'
+}
+
+test {
+    useTestNG() {
+        suites 'src/test/resources/testng.xml'
+        useDefaultListeners = true
+        outputDirectory = file("$projectDir/testngOutput")
+    }
+    reports.html.enabled = false
+}
+
+test {
+    useJUnitPlatform()
+}
