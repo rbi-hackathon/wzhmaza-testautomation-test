@@ -4,7 +4,7 @@
     <test name="Google Test">
         <parameter name="browserName" value="chrome" />
         <classes>
-            <class name="gui.Tests.TitleVerificationTest"/>
+            <class name="gui.Tests.LoginPageTest"/>
         </classes>
     </test> <!-- Parallel Test -->
 </suite> <!-- Default Suite -->
