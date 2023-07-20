@@ -18,10 +18,18 @@ public class LoginPage {
     @FindBy(className = "btnSubmit")
     private WebElement submitButton;
 
+    @FindBy(xpath = "//div[@data-test='email-error']/div")
+    private WebElement errorMessageEMail;
+
+    @FindBy(xpath = "//div[@data-test='password-error']/div")
+    private WebElement errorMessagePassword;
+
+    @FindBy(xpath = "//div[@data-test='login-error']/div")
+    private WebElement errorMessageLogin;
+
     private final WebDriver driver;
 
     public LoginPage(final WebDriver driver) {
-        Objects.requireNonNull(driver);
         this.driver = driver;
         PageFactory.initElements(this.driver, this);
     }
@@ -30,7 +38,19 @@ public class LoginPage {
         eMailField.sendKeys(eMail);
     }
     public void insertPassword(String password) {
-        eMailField.sendKeys(password);
+        passwordField.sendKeys(password);
+    }
+
+    public String getErrorMessageEMail() {
+        return errorMessageEMail.getText();
+    }
+
+    public String getErrorMessagePassword() {
+        return errorMessagePassword.getText();
+    }
+
+    public String getErrorMessageLogin() {
+        return errorMessageLogin.getText();
     }
 
     public void clickLogin() {

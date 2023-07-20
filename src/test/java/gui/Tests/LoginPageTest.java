@@ -1,33 +1,23 @@
+package gui.Tests;
+
 import gui.PageObjects.LoginPage;
 import gui.Tests.BaseTest;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 public class LoginPageTest extends BaseTest {
-    private WebDriver driver;
     private LoginPage loginPage;
-
-    @BeforeClass
-    public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
-        driver = new ChromeDriver();
-        loginPage = new LoginPage(driver);
-        loginPage.loadLoginPage();
-    }
-
-    @AfterClass
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
 
     @Test
     public void testLoginSuccess() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
         loginPage.insertEmailAddress("user@example.com");
         loginPage.insertPassword("password123");
         loginPage.clickLogin();
@@ -37,17 +27,78 @@ public class LoginPageTest extends BaseTest {
 
     @Test
     public void testLoginFailure() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
         loginPage.insertEmailAddress("invaliduser@example.com");
         loginPage.insertPassword("wrongpassword");
         loginPage.clickLogin();
-        // Assuming the login failure displays an error message, you can add verification logic here.
-        // For example, you can check if an error message element exists on the login page to verify the login failure.
+
+        Assert.assertEquals(loginPage.getErrorMessageLogin(), "Invalid email or password");
     }
 
     @Test
-    public void testEmptyFields() {
+    public void testEmptyPasswordField() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertEmailAddress("test@test.at");
         loginPage.clickLogin();
-        // Assuming the login attempt does not proceed with empty fields and displays an error message, you can add verification logic here.
-        // For example, you can check if an error message element exists on the login page to verify the empty fields error.
+  
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
     }
+
+    @Test
+    public void testEmptyEmailField() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertPassword("test");
+        loginPage.clickLogin();
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+    }
+
+    @Test
+    public void testEmptyEmailAndPasswordFields() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.clickLogin();
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
+    }
+
+    @Test
+    public void testEmptyEmailAndPasswordFieldsWithTab() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertEmailAddress(Keys.TAB.toString());
+        loginPage.insertPassword(Keys.TAB.toString());
+        loginPage.clickLogin();
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
+    }
+
+    @Test
+    public void testEmptyEmailAndPasswordFieldsWithTabAndEnter() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertEmailAddress(Keys.TAB.toString());
+        loginPage.insertPassword(Keys.TAB.toString());
+        loginPage.clickLogin();
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
+    }
+
+    @Test
+    public void testEmptyEmailAndPasswordFieldsWithTabAndEnter2() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertEmailAddress(Keys.TAB.toString());
+        loginPage.insertPassword(Keys.ENTER.toString());
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
+    }
+
 }
