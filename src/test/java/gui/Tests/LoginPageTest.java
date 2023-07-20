@@ -2,6 +2,7 @@ package gui.Tests;
 
 import gui.PageObjects.LoginPage;
 import gui.Tests.BaseTest;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
@@ -36,15 +37,6 @@ public class LoginPageTest extends BaseTest {
     }
 
     @Test
-    public void testEmptyFields() {
-        loginPage = new LoginPage(driver);
-        loginPage.loadLoginPage();
-        loginPage.clickLogin();
-        
-        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
-    }
-
-    @Test
     public void testEmptyPasswordField() {
         loginPage = new LoginPage(driver);
         loginPage.loadLoginPage();
@@ -53,4 +45,60 @@ public class LoginPageTest extends BaseTest {
   
         Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
     }
+
+    @Test
+    public void testEmptyEmailField() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertPassword("test");
+        loginPage.clickLogin();
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+    }
+
+    @Test
+    public void testEmptyEmailAndPasswordFields() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.clickLogin();
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
+    }
+
+    @Test
+    public void testEmptyEmailAndPasswordFieldsWithTab() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertEmailAddress(Keys.TAB.toString());
+        loginPage.insertPassword(Keys.TAB.toString());
+        loginPage.clickLogin();
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
+    }
+
+    @Test
+    public void testEmptyEmailAndPasswordFieldsWithTabAndEnter() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertEmailAddress(Keys.TAB.toString());
+        loginPage.insertPassword(Keys.TAB.toString());
+        loginPage.clickLogin();
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
+    }
+
+    @Test
+    public void testEmptyEmailAndPasswordFieldsWithTabAndEnter2() {
+        loginPage = new LoginPage(driver);
+        loginPage.loadLoginPage();
+        loginPage.insertEmailAddress(Keys.TAB.toString());
+        loginPage.insertPassword(Keys.ENTER.toString());
+  
+        Assert.assertEquals(loginPage.getErrorMessageEMail(), "E-mail is required.");
+        Assert.assertEquals(loginPage.getErrorMessagePassword(), "Password is required.");
+    }
+
 }
